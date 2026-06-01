@@ -1,0 +1,1810 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Zypher (ZPH) — Healthcare Payments Infrastructure on Solana</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --teal: #0F6E56;
+    --teal-light: #E1F5EE;
+    --teal-mid: #1D9E75;
+    --teal-dark: #085041;
+    --navy: #0C2340;
+    --navy-mid: #1A3A5C;
+    --slate: #4A5568;
+    --slate-light: #718096;
+    --bg: #F7F9FC;
+    --bg-white: #FFFFFF;
+    --border: #E2E8F0;
+    --text: #1A202C;
+    --text-muted: #64748B;
+    --accent: #1D9E75;
+    --accent-hover: #0F6E56;
+    --gold: #B7791F;
+    --gold-light: #FEFCE8;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.7;
+    font-size: 16px;
+  }
+
+  /* NAV */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    height: 64px;
+    display: flex; align-items: center; justify-content: space-between;
+  }
+
+  .nav-brand {
+    display: flex; align-items: center; gap: 10px;
+    text-decoration: none;
+  }
+
+  .nav-logo-mark {
+    width: 36px; height: 36px;
+    background: var(--teal);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-family: 'DM Serif Display', serif;
+    font-size: 18px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+  }
+
+  .nav-brand-text {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy);
+    letter-spacing: -0.3px;
+  }
+
+  .nav-brand-ticker {
+    font-size: 12px;
+    font-weight: 400;
+    color: var(--teal-mid);
+    background: var(--teal-light);
+    padding: 2px 7px;
+    border-radius: 4px;
+    margin-left: 4px;
+  }
+
+  .nav-links {
+    display: flex; align-items: center; gap: 2rem;
+    list-style: none;
+  }
+
+  .nav-links a {
+    text-decoration: none;
+    color: var(--slate);
+    font-size: 14px;
+    font-weight: 500;
+    transition: color 0.2s;
+  }
+
+  .nav-links a:hover { color: var(--teal); }
+
+  .nav-cta {
+    background: var(--teal) !important;
+    color: white !important;
+    padding: 8px 18px;
+    border-radius: 6px;
+    font-size: 13px !important;
+    transition: background 0.2s !important;
+  }
+
+  .nav-cta:hover { background: var(--teal-dark) !important; }
+
+  /* HERO */
+  .hero {
+    padding: 140px 2rem 100px;
+    max-width: 1100px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 80px;
+    align-items: center;
+  }
+
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--teal-light);
+    color: var(--teal);
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    padding: 6px 14px;
+    border-radius: 20px;
+    margin-bottom: 24px;
+  }
+
+  .hero-eyebrow-dot {
+    width: 6px; height: 6px;
+    background: var(--teal-mid);
+    border-radius: 50%;
+    animation: pulse 2s ease-in-out infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  .hero h1 {
+    font-family: 'DM Serif Display', serif;
+    font-size: 52px;
+    line-height: 1.1;
+    color: var(--navy);
+    margin-bottom: 24px;
+    letter-spacing: -1px;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--teal);
+  }
+
+  .hero-desc {
+    font-size: 17px;
+    color: var(--slate);
+    line-height: 1.75;
+    margin-bottom: 36px;
+    font-weight: 300;
+  }
+
+  .hero-actions {
+    display: flex; gap: 12px; flex-wrap: wrap;
+  }
+
+  .btn-primary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: var(--teal);
+    color: white;
+    padding: 13px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    transition: background 0.2s, transform 0.1s;
+  }
+
+  .btn-primary:hover { background: var(--teal-dark); transform: translateY(-1px); }
+
+  .btn-secondary {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: white;
+    color: var(--navy);
+    padding: 13px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    border: 1px solid var(--border);
+    transition: border-color 0.2s, transform 0.1s;
+  }
+
+  .btn-secondary:hover { border-color: var(--teal); color: var(--teal); transform: translateY(-1px); }
+
+  .hero-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+
+  .stat-card {
+    background: white;
+    padding: 28px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+
+  .stat-card:first-child { border-radius: 16px 0 0 0; }
+  .stat-card:nth-child(2) { border-radius: 0 16px 0 0; }
+  .stat-card:nth-child(3) { border-radius: 0 0 0 16px; }
+  .stat-card:last-child { border-radius: 0 0 16px 0; }
+
+  .stat-value {
+    font-family: 'DM Serif Display', serif;
+    font-size: 34px;
+    color: var(--navy);
+    line-height: 1;
+  }
+
+  .stat-label {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+  }
+
+  .stat-sub {
+    font-size: 11px;
+    color: var(--teal);
+    font-weight: 500;
+  }
+
+  /* TICKER STRIP */
+  .ticker-strip {
+    background: var(--navy);
+    color: white;
+    padding: 12px 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  .ticker-inner {
+    display: inline-flex; gap: 3rem;
+    animation: ticker 20s linear infinite;
+    font-size: 13px;
+    font-weight: 500;
+    letter-spacing: 0.04em;
+    opacity: 0.85;
+  }
+
+  @keyframes ticker {
+    from { transform: translateX(0); }
+    to { transform: translateX(-50%); }
+  }
+
+  .ticker-item { display: flex; align-items: center; gap: 8px; }
+  .ticker-dot { width: 4px; height: 4px; background: var(--teal-mid); border-radius: 50%; }
+
+  /* SECTION WRAPPER */
+  .section {
+    padding: 96px 2rem;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-full {
+    padding: 96px 2rem;
+    background: white;
+  }
+
+  .section-full-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--teal);
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px;
+    color: var(--navy);
+    line-height: 1.15;
+    letter-spacing: -0.5px;
+    margin-bottom: 16px;
+  }
+
+  .section-sub {
+    font-size: 17px;
+    color: var(--slate);
+    font-weight: 300;
+    max-width: 560px;
+    line-height: 1.75;
+    margin-bottom: 56px;
+  }
+
+  /* PROBLEM SECTION */
+  .problem-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 56px;
+  }
+
+  .problem-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .problem-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: var(--teal);
+  }
+
+  .problem-number {
+    font-family: 'DM Serif Display', serif;
+    font-size: 48px;
+    color: var(--teal);
+    line-height: 1;
+    margin-bottom: 12px;
+  }
+
+  .problem-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .problem-desc {
+    font-size: 14px;
+    color: var(--slate);
+    line-height: 1.65;
+  }
+
+  /* HOW IT WORKS */
+  .steps {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 0;
+    position: relative;
+    margin-top: 56px;
+  }
+
+  .steps::before {
+    content: '';
+    position: absolute;
+    top: 28px; left: 10%; right: 10%;
+    height: 1px;
+    background: var(--border);
+    z-index: 0;
+  }
+
+  .step {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    padding: 0 16px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .step-num {
+    width: 56px; height: 56px;
+    background: var(--teal);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: white;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    margin-bottom: 20px;
+    flex-shrink: 0;
+  }
+
+  .step-title {
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 8px;
+  }
+
+  .step-desc {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.6;
+  }
+
+  /* TOKENOMICS */
+  .token-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 48px;
+    align-items: start;
+  }
+
+  .token-specs {
+    background: var(--navy);
+    border-radius: 16px;
+    padding: 40px;
+    color: white;
+  }
+
+  .token-specs-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    margin-bottom: 28px;
+    color: white;
+  }
+
+  .token-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    font-size: 14px;
+  }
+
+  .token-row:last-child { border-bottom: none; }
+
+  .token-key { color: rgba(255,255,255,0.55); font-weight: 400; }
+  .token-val { color: white; font-weight: 500; text-align: right; font-size: 13px; }
+
+  .token-val-highlight {
+    color: var(--teal-mid);
+    font-weight: 600;
+    font-size: 13px;
+  }
+
+  .token-utility h3 {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 20px;
+  }
+
+  .utility-item {
+    display: flex; gap: 16px;
+    padding: 16px 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .utility-item:last-child { border-bottom: none; }
+
+  .utility-icon {
+    width: 36px; height: 36px;
+    background: var(--teal-light);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    color: var(--teal);
+    font-size: 18px;
+  }
+
+  .utility-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .utility-desc {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.55;
+  }
+
+  /* ROADMAP */
+  .roadmap-phases {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: 24px;
+    margin-top: 56px;
+  }
+
+  .phase-card {
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .phase-header {
+    padding: 24px 28px 20px;
+    background: white;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .phase-tag {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 4px;
+    margin-bottom: 12px;
+    display: inline-block;
+  }
+
+  .phase-tag.done { background: var(--teal-light); color: var(--teal); }
+  .phase-tag.active { background: #FEF3C7; color: #92400E; }
+  .phase-tag.future { background: #F1F5F9; color: var(--slate); }
+
+  .phase-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 22px;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .phase-timeline {
+    font-size: 12px;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .phase-items {
+    padding: 20px 28px;
+    background: white;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .phase-item {
+    display: flex; align-items: flex-start; gap: 10px;
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.5;
+  }
+
+  .phase-check {
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    margin-top: 1px;
+    font-size: 10px;
+  }
+
+  .phase-check.done { background: var(--teal); color: white; }
+  .phase-check.active { background: #FEF3C7; color: #92400E; border: 1px solid #FCD34D; }
+  .phase-check.future { background: #F1F5F9; color: var(--text-muted); }
+
+  /* ZCARE TEASER */
+  .zcare-banner {
+    background: var(--navy);
+    border-radius: 20px;
+    padding: 64px;
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .zcare-banner::before {
+    content: 'zCARE';
+    position: absolute;
+    right: -20px; top: -40px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 200px;
+    color: rgba(255,255,255,0.03);
+    line-height: 1;
+    pointer-events: none;
+  }
+
+  .zcare-eyebrow {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--teal-mid);
+    margin-bottom: 16px;
+  }
+
+  .zcare-title {
+    font-family: 'DM Serif Display', serif;
+    font-size: 40px;
+    color: white;
+    line-height: 1.15;
+    margin-bottom: 20px;
+  }
+
+  .zcare-desc {
+    font-size: 16px;
+    color: rgba(255,255,255,0.6);
+    line-height: 1.75;
+    font-weight: 300;
+    max-width: 480px;
+  }
+
+  .zcare-badge {
+    background: rgba(29,158,117,0.15);
+    border: 1px solid rgba(29,158,117,0.3);
+    border-radius: 16px;
+    padding: 40px 36px;
+    text-align: center;
+    min-width: 200px;
+  }
+
+  .zcare-badge-label {
+    font-size: 11px;
+    color: var(--teal-mid);
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+
+  .zcare-badge-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 36px;
+    color: white;
+    margin-bottom: 8px;
+  }
+
+  .zcare-badge-sub {
+    font-size: 12px;
+    color: rgba(255,255,255,0.45);
+  }
+
+  /* TEAM */
+  .team-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 24px;
+    margin-top: 56px;
+  }
+
+  .team-card {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 32px 28px;
+    text-align: center;
+  }
+
+  .team-avatar {
+    width: 72px; height: 72px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 16px;
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: var(--teal);
+  }
+
+  .team-name {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 4px;
+  }
+
+  .team-role {
+    font-size: 13px;
+    color: var(--teal);
+    font-weight: 500;
+    margin-bottom: 12px;
+  }
+
+  .team-bio {
+    font-size: 13px;
+    color: var(--slate);
+    line-height: 1.6;
+  }
+
+  /* FAQ */
+  .faq-list {
+    margin-top: 48px;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+
+  .faq-item {
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+
+  .faq-q {
+    width: 100%;
+    background: none;
+    border: none;
+    padding: 22px 28px;
+    text-align: left;
+    font-size: 15px;
+    font-weight: 500;
+    color: var(--navy);
+    cursor: pointer;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 16px;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.15s;
+  }
+
+  .faq-q:hover { background: var(--bg); }
+
+  .faq-icon {
+    width: 24px; height: 24px;
+    border-radius: 50%;
+    background: var(--teal-light);
+    color: var(--teal);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    flex-shrink: 0;
+    transition: transform 0.2s;
+    line-height: 1;
+  }
+
+  .faq-a {
+    padding: 0 28px;
+    font-size: 14px;
+    color: var(--slate);
+    line-height: 1.7;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.3s ease, padding 0.3s ease;
+  }
+
+  .faq-item.open .faq-a {
+    max-height: 300px;
+    padding: 0 28px 22px;
+  }
+
+  .faq-item.open .faq-icon {
+    transform: rotate(45deg);
+  }
+
+  /* LINKS */
+  .links-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+    margin-top: 48px;
+  }
+
+  .link-card {
+    display: flex; align-items: center; gap: 16px;
+    background: white;
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px 20px;
+    text-decoration: none;
+    color: var(--navy);
+    transition: border-color 0.2s, transform 0.1s, box-shadow 0.2s;
+  }
+
+  .link-card:hover {
+    border-color: var(--teal);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 16px rgba(15,110,86,0.1);
+  }
+
+  .link-icon {
+    width: 44px; height: 44px;
+    border-radius: 10px;
+    background: var(--teal-light);
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    font-size: 22px;
+  }
+
+  .link-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 2px;
+  }
+
+  .link-desc {
+    font-size: 12px;
+    color: var(--text-muted);
+  }
+
+  .link-arrow {
+    margin-left: auto;
+    color: var(--border);
+    font-size: 18px;
+    transition: color 0.2s;
+  }
+
+  .link-card:hover .link-arrow { color: var(--teal); }
+
+  /* MINT ADDRESS */
+  .mint-bar {
+    background: var(--navy);
+    padding: 20px 32px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+    margin-top: 48px;
+    flex-wrap: wrap;
+  }
+
+  .mint-label {
+    font-size: 11px;
+    color: rgba(255,255,255,0.45);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+
+  .mint-address {
+    font-family: 'DM Mono', monospace;
+    font-size: 13px;
+    color: var(--teal-mid);
+    letter-spacing: 0.03em;
+    word-break: break-all;
+  }
+
+  .copy-btn {
+    background: rgba(29,158,117,0.15);
+    border: 1px solid rgba(29,158,117,0.3);
+    color: var(--teal-mid);
+    border-radius: 6px;
+    padding: 8px 16px;
+    font-size: 13px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: background 0.2s;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+
+  .copy-btn:hover { background: rgba(29,158,117,0.25); }
+
+  /* HOW TO BUY */
+  .htb-steps {
+    margin-top: 56px;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .htb-step {
+    display: flex;
+    gap: 32px;
+    padding-bottom: 40px;
+  }
+
+  .htb-step-left {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    flex-shrink: 0;
+  }
+
+  .htb-num {
+    width: 48px; height: 48px;
+    background: var(--teal);
+    color: white;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'DM Serif Display', serif;
+    font-size: 20px;
+    flex-shrink: 0;
+    z-index: 1;
+  }
+
+  .htb-line {
+    width: 2px;
+    flex: 1;
+    background: var(--border);
+    margin: 8px 0;
+    min-height: 40px;
+  }
+
+  .htb-step-right {
+    padding-top: 10px;
+    padding-bottom: 8px;
+    flex: 1;
+  }
+
+  .htb-step-title {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--navy);
+    margin-bottom: 10px;
+    line-height: 1.3;
+  }
+
+  .htb-step-desc {
+    font-size: 15px;
+    color: var(--slate);
+    line-height: 1.75;
+    margin-bottom: 16px;
+  }
+
+  .htb-step-desc strong { color: var(--navy); font-weight: 600; }
+
+  .htb-callout {
+    display: flex; align-items: flex-start; gap: 10px;
+    background: var(--teal-light);
+    border-left: 3px solid var(--teal);
+    border-radius: 0 8px 8px 0;
+    padding: 12px 16px;
+    font-size: 13px;
+    color: var(--teal-dark);
+    line-height: 1.6;
+  }
+
+  .htb-callout strong { color: var(--teal-dark); font-weight: 600; }
+
+  .htb-callout-warn {
+    background: #FEF3C7;
+    border-left-color: #F59E0B;
+    color: #92400E;
+  }
+
+  .htb-callout-warn strong { color: #78350F; }
+
+  .htb-callout-icon { flex-shrink: 0; font-size: 15px; }
+
+  .htb-mint-box {
+    display: flex; align-items: center; gap: 12px;
+    background: var(--navy);
+    border-radius: 8px;
+    padding: 14px 18px;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .htb-mint-label {
+    font-size: 10px;
+    color: rgba(255,255,255,0.4);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    width: 100%;
+    margin-bottom: -4px;
+  }
+
+  .htb-mint-addr {
+    font-family: monospace;
+    font-size: 12px;
+    color: var(--teal-mid);
+    flex: 1;
+    word-break: break-all;
+  }
+
+  .htb-copy {
+    background: rgba(29,158,117,0.2);
+    border: 1px solid rgba(29,158,117,0.35);
+    color: var(--teal-mid);
+    border-radius: 5px;
+    padding: 6px 14px;
+    font-size: 12px;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    white-space: nowrap;
+    transition: background 0.2s;
+  }
+
+  .htb-copy:hover { background: rgba(29,158,117,0.3); }
+
+  .htb-actions {
+    display: flex; gap: 12px; flex-wrap: wrap;
+    margin-top: 8px;
+  }
+
+  /* FOOTER */
+  footer {
+    background: var(--navy);
+    color: rgba(255,255,255,0.6);
+    padding: 64px 2rem 40px;
+  }
+
+  .footer-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .footer-top {
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr 1fr;
+    gap: 48px;
+    padding-bottom: 48px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+
+  .footer-brand-name {
+    font-family: 'DM Serif Display', serif;
+    font-size: 24px;
+    color: white;
+    margin-bottom: 12px;
+  }
+
+  .footer-brand-desc {
+    font-size: 14px;
+    line-height: 1.7;
+    color: rgba(255,255,255,0.45);
+    max-width: 280px;
+  }
+
+  .footer-col-title {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.35);
+    margin-bottom: 16px;
+  }
+
+  .footer-links {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .footer-links a {
+    color: rgba(255,255,255,0.55);
+    text-decoration: none;
+    font-size: 14px;
+    transition: color 0.2s;
+  }
+
+  .footer-links a:hover { color: var(--teal-mid); }
+
+  .footer-bottom {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 32px;
+    font-size: 12px;
+    color: rgba(255,255,255,0.3);
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .footer-disclaimer {
+    font-size: 11px;
+    color: rgba(255,255,255,0.2);
+    margin-top: 24px;
+    line-height: 1.6;
+    max-width: 800px;
+  }
+
+  /* WHITEPAPER CTA */
+  .whitepaper-cta {
+    display: flex; align-items: center; gap: 20px;
+    background: white;
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--teal);
+    border-radius: 0 10px 10px 0;
+    padding: 24px 28px;
+    margin-top: 48px;
+    text-decoration: none;
+    color: var(--navy);
+    transition: box-shadow 0.2s;
+  }
+
+  .whitepaper-cta:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.08); }
+
+  .wp-icon {
+    width: 48px; height: 48px;
+    background: var(--teal-light);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 24px;
+    flex-shrink: 0;
+  }
+
+  .wp-title { font-weight: 600; font-size: 15px; margin-bottom: 3px; }
+  .wp-sub { font-size: 13px; color: var(--text-muted); }
+
+  /* RESPONSIVE */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 48px; padding-top: 110px; }
+    .problem-grid, .roadmap-phases { grid-template-columns: 1fr; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .steps::before { display: none; }
+    .token-grid { grid-template-columns: 1fr; }
+    .team-grid { grid-template-columns: 1fr 1fr; }
+    .links-grid { grid-template-columns: 1fr 1fr; }
+    .footer-top { grid-template-columns: 1fr 1fr; }
+    .zcare-banner { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+  }
+
+  @media (max-width: 600px) {
+    .hero h1 { font-size: 36px; }
+    .hero-stats { grid-template-columns: 1fr 1fr; }
+    .team-grid { grid-template-columns: 1fr; }
+    .links-grid { grid-template-columns: 1fr; }
+    .section-title { font-size: 30px; }
+    .footer-top { grid-template-columns: 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="nav-brand">
+    <div class="nav-logo-mark">Z</div>
+    <span class="nav-brand-text">Zypher</span>
+    <span class="nav-brand-ticker">ZPH</span>
+  </a>
+  <ul class="nav-links">
+    <li><a href="#about">About</a></li>
+    <li><a href="#tokenomics">Tokenomics</a></li>
+    <li><a href="#roadmap">Roadmap</a></li>
+    <li><a href="#zcare">zCARE</a></li>
+    <li><a href="#howtobuy">How to Buy</a></li>
+    <li><a href="#faq">FAQ</a></li>
+    <li><a href="https://jup.ag/tokens/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank" class="nav-cta">Buy ZPH</a></li>
+  </ul>
+</nav>
+
+<!-- HERO -->
+<section>
+  <div class="hero">
+    <div>
+      <div class="hero-eyebrow">
+        <span class="hero-eyebrow-dot"></span>
+        Live on Solana
+      </div>
+      <h1>Healthcare payments need a <em>data layer.</em></h1>
+      <p class="hero-desc">Zypher (ZPH) is building verified, on-chain provider infrastructure connected to federal data pipelines — designed to solve the $80B+ uncompensated care crisis in American healthcare.</p>
+      <div class="hero-actions">
+        <a href="https://jup.ag/tokens/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank" class="btn-primary">
+          Buy ZPH on Jupiter ↗
+        </a>
+        <a href="https://github.com/zypherthecoin/Zypher/blob/main/Zypher_Whitepaper.docx" target="_blank" class="btn-secondary">
+          Read Whitepaper
+        </a>
+      </div>
+    </div>
+    <div>
+      <div class="hero-stats">
+        <div class="stat-card">
+          <div class="stat-value">$80B+</div>
+          <div class="stat-label">Uncompensated Care</div>
+          <div class="stat-sub">Lost annually in the US</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">1B</div>
+          <div class="stat-label">ZPH Supply</div>
+          <div class="stat-sub">Fixed, minting revoked</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">Mar '26</div>
+          <div class="stat-label">Token Launch</div>
+          <div class="stat-sub">TGE March 17, 2026</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-value">Solana</div>
+          <div class="stat-label">Blockchain</div>
+          <div class="stat-sub">65K TPS, sub-$0.001 fees</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TICKER -->
+<div class="ticker-strip">
+  <div class="ticker-inner">
+    <span class="ticker-item"><span class="ticker-dot"></span> ZPH · SOLANA · HEALTHCARE INFRASTRUCTURE</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> MINT: 8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> MINT AUTHORITY REVOKED · FREEZE AUTHORITY REVOKED</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> LISTED ON JUPITER · RAYDIUM · DEXSCREENER</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> PHASE 2: zCARE STABLE PAYMENT TOKEN · COMING SOON</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> ZPH · SOLANA · HEALTHCARE INFRASTRUCTURE</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> MINT: 8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> MINT AUTHORITY REVOKED · FREEZE AUTHORITY REVOKED</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> LISTED ON JUPITER · RAYDIUM · DEXSCREENER</span>
+    <span class="ticker-item"><span class="ticker-dot"></span> PHASE 2: zCARE STABLE PAYMENT TOKEN · COMING SOON</span>
+  </div>
+</div>
+
+<!-- ABOUT / PROBLEM -->
+<div id="about" class="section-full">
+  <div class="section-full-inner">
+    <div class="section-label">The Problem</div>
+    <h2 class="section-title">American healthcare loses billions<br>to a broken data layer.</h2>
+    <p class="section-sub">Provider directories are inaccurate. Billing systems are fragmented. No unified, real-time source of provider truth exists — and hospitals pay for it every year.</p>
+    <div class="problem-grid">
+      <div class="problem-card">
+        <div class="problem-number">$80B+</div>
+        <div class="problem-title">Uncompensated Care Annually</div>
+        <div class="problem-desc">U.S. hospitals absorb over $80 billion per year in uncompensated care — services rendered to patients whose claims fail due to data errors, eligibility failures, or billing fragmentation.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-number">~50%</div>
+        <div class="problem-title">Provider Directory Error Rate</div>
+        <div class="problem-desc">Studies show provider directory error rates as high as 50% in certain markets. Outdated records cause claims denials that cannot be corrected retroactively, costing providers billions.</div>
+      </div>
+      <div class="problem-card">
+        <div class="problem-number">0</div>
+        <div class="problem-title">Real-Time National Provider Registry</div>
+        <div class="problem-desc">The federal NPPES registry is batch-updated and siloed. No shared, real-time, composable infrastructure exists to synchronize provider data across payers, clearinghouses, and health systems.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW IT WORKS -->
+<div class="section">
+  <div class="section-label">The Solution</div>
+  <h2 class="section-title">On-chain provider infrastructure,<br>anchored to federal data.</h2>
+  <p class="section-sub">Zypher ingests authoritative federal data and anchors it permanently on Solana — creating a composable, verifiable provider registry any participant can query.</p>
+  <div class="steps">
+    <div class="step">
+      <div class="step-num">1</div>
+      <div class="step-title">Federal Data Ingestion</div>
+      <div class="step-desc">NPPES, CMS, and HRSA data pipelines are connected and continuously ingested into the Zypher network.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">2</div>
+      <div class="step-title">Verification & Hashing</div>
+      <div class="step-desc">Provider records are normalized, validated, and cryptographically hashed using SHA-256.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">3</div>
+      <div class="step-title">On-Chain Anchoring</div>
+      <div class="step-desc">Verified hashes are anchored to Solana, creating an immutable audit trail linked to each provider NPI.</div>
+    </div>
+    <div class="step">
+      <div class="step-num">4</div>
+      <div class="step-title">Composable Access</div>
+      <div class="step-desc">Any participant — payer, clearinghouse, or patient — can query verified provider data in real time via ZPH.</div>
+    </div>
+  </div>
+</div>
+
+<!-- TOKENOMICS -->
+<div id="tokenomics" class="section-full">
+  <div class="section-full-inner">
+    <div class="section-label">Tokenomics</div>
+    <h2 class="section-title">ZPH — Infrastructure Token</h2>
+    <p class="section-sub">ZPH powers access, governance, and liquidity across the Zypher network. Fixed supply, both authorities permanently revoked.</p>
+    <div class="token-grid">
+      <div class="token-specs">
+        <div class="token-specs-title">Token Specifications</div>
+        <div class="token-row">
+          <span class="token-key">Token Name</span>
+          <span class="token-val">Zypher</span>
+        </div>
+        <div class="token-row">
+          <span class="token-key">Ticker</span>
+          <span class="token-val-highlight">ZPH</span>
+        </div>
+        <div class="token-row">
+          <span class="token-key">Blockchain</span>
+          <span class="token-val">Solana (SPL)</span>
+        </div>
+        <div class="token-row">
+          <span class="token-key">Total Supply</span>
+          <span class="token-val-highlight">1,000,000,000</span>
+        </div>
+        <div class="token-row">
+          <span class="token-key">Mint Authority</span>
+          <span class="token-val" style="color: #6EE7B7;">Revoked ✓</span>
+        </div>
+        <div class="token-row">
+          <span class="token-key">Freeze Authority</span>
+          <span class="token-val" style="color: #6EE7B7;">Revoked ✓</span>
+        </div>
+        <div class="token-row">
+          <span class="token-key">TGE</span>
+          <span class="token-val">March 17, 2026</span>
+        </div>
+        <div class="token-row">
+          <span class="token-key">DEX</span>
+          <span class="token-val">Jupiter / Raydium</span>
+        </div>
+      </div>
+      <div class="token-utility">
+        <h3>ZPH Utility</h3>
+        <div class="utility-item">
+          <div class="utility-icon">🔍</div>
+          <div>
+            <div class="utility-title">Network Query Fees</div>
+            <div class="utility-desc">Participants querying verified provider records pay fees denominated in ZPH, creating continuous demand as utilization scales.</div>
+          </div>
+        </div>
+        <div class="utility-item">
+          <div class="utility-icon">⚙️</div>
+          <div>
+            <div class="utility-title">Validator Incentives</div>
+            <div class="utility-desc">Nodes that ingest, verify, and anchor federal data to the chain are compensated in ZPH.</div>
+          </div>
+        </div>
+        <div class="utility-item">
+          <div class="utility-icon">🗳️</div>
+          <div>
+            <div class="utility-title">Governance</div>
+            <div class="utility-desc">ZPH holders participate in protocol governance — data source additions, fee parameters, and network upgrades.</div>
+          </div>
+        </div>
+        <div class="utility-item">
+          <div class="utility-icon">🏦</div>
+          <div>
+            <div class="utility-title">zCARE Collateral</div>
+            <div class="utility-desc">Phase 2 introduces ZPH as collateral backing the zCARE stable payment token, creating a direct demand sink.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="mint-bar">
+      <div>
+        <div class="mint-label">Mint Address</div>
+        <div class="mint-address" id="mint-addr">8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t</div>
+      </div>
+      <button class="copy-btn" onclick="copyMint()">Copy Address</button>
+    </div>
+  </div>
+</div>
+
+<!-- ROADMAP -->
+<div id="roadmap" class="section">
+  <div class="section-label">Roadmap</div>
+  <h2 class="section-title">Building the infrastructure,<br>phase by phase.</h2>
+  <p class="section-sub">From token launch to national-scale healthcare data infrastructure and the zCARE payment layer.</p>
+  <div class="roadmap-phases">
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-tag done">Underway</div>
+        <div class="phase-title">Phase 1</div>
+        <div class="phase-timeline">Infrastructure Foundation · 2026</div>
+      </div>
+      <div class="phase-items">
+        <div class="phase-item">
+          <div class="phase-check done">✓</div>
+          <span>Token Generation Event (March 17, 2026)</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check done">✓</div>
+          <span>Raydium liquidity pool deployment</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check done">✓</div>
+          <span>Jupiter DEX listing</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check done">✓</div>
+          <span>Website & whitepaper publication</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check active">→</div>
+          <span>CoinGecko listing</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check active">→</div>
+          <span>Community growth & Twitter presence</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>NPPES data pipeline proof-of-concept (Q3 2026)</span>
+        </div>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-tag future">Upcoming</div>
+        <div class="phase-title">Phase 2</div>
+        <div class="phase-timeline">Payment Layer · 2026–2027</div>
+      </div>
+      <div class="phase-items">
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>zCARE stable payment token design</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>Regulatory framework & compliance scaffolding</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>Pilot partnerships with billing clearinghouses</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>zCARE token generation & liquidity initialization</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>Cross-chain bridge exploration</span>
+        </div>
+      </div>
+    </div>
+    <div class="phase-card">
+      <div class="phase-header">
+        <div class="phase-tag future">Horizon</div>
+        <div class="phase-title">Phase 3</div>
+        <div class="phase-timeline">Scale & Adoption · 2027+</div>
+      </div>
+      <div class="phase-items">
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>National-scale NPPES/CMS data anchoring</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>Payer & health system integration partnerships</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>Expansion to additional federal health data sources</span>
+        </div>
+        <div class="phase-item">
+          <div class="phase-check future">○</div>
+          <span>Governance decentralization & DAO transition</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ZCARE -->
+<div id="zcare" class="section-full" style="background: var(--bg);">
+  <div class="section-full-inner">
+    <div class="zcare-banner">
+      <div>
+        <div class="zcare-eyebrow">Phase 2 · Coming Soon</div>
+        <h2 class="zcare-title">Introducing zCARE —<br>Healthcare's Payment Token.</h2>
+        <p class="zcare-desc">Built on Zypher's verified provider infrastructure, zCARE is a stable payment token designed specifically for healthcare transactions — with HIPAA-compatible structures and clearinghouse integration hooks.</p>
+      </div>
+      <div class="zcare-badge">
+        <div class="zcare-badge-label">Phase 2 Token</div>
+        <div class="zcare-badge-name">zCARE</div>
+        <div class="zcare-badge-sub">Stable · Healthcare-native · Composable</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- WHITEPAPER -->
+<div class="section">
+  <div class="section-label">Documentation</div>
+  <h2 class="section-title">Read the Whitepaper</h2>
+  <p class="section-sub">The full Zypher whitepaper details our technical architecture, tokenomics, market analysis, and roadmap.</p>
+  <a href="https://github.com/zypherthecoin/Zypher/blob/main/Zypher_Whitepaper.docx" target="_blank" class="whitepaper-cta">
+    <div class="wp-icon">📄</div>
+    <div>
+      <div class="wp-title">Zypher Whitepaper — Version 1.0</div>
+      <div class="wp-sub">Full technical documentation · March 2026 · github.com/zypherthecoin/Zypher</div>
+    </div>
+    <div class="link-arrow">↗</div>
+  </a>
+</div>
+
+<!-- TEAM -->
+<div id="team" class="section-full">
+  <div class="section-full-inner">
+    <div class="section-label">Team</div>
+    <h2 class="section-title">Built by healthcare & crypto<br>infrastructure specialists.</h2>
+    <p class="section-sub">The Zypher team combines deep expertise in healthcare systems, blockchain development, and payments infrastructure.</p>
+    <div class="team-grid">
+      <div class="team-card">
+        <div class="team-avatar">Z</div>
+        <div class="team-name">Zypher Core Team</div>
+        <div class="team-role">Founders & Protocol Engineers</div>
+        <div class="team-bio">The core development team behind ZPH and the Zypher infrastructure protocol. Focused on building the data layer that healthcare payments need.</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">🏥</div>
+        <div class="team-name">Healthcare Advisors</div>
+        <div class="team-role">Industry & Regulatory Guidance</div>
+        <div class="team-bio">Advisors with experience in healthcare billing, provider credentialing, and federal data systems including NPPES, CMS, and HRSA integrations.</div>
+      </div>
+      <div class="team-card">
+        <div class="team-avatar">⛓️</div>
+        <div class="team-name">Blockchain Partners</div>
+        <div class="team-role">Solana Ecosystem & DeFi</div>
+        <div class="team-bio">Ecosystem partners within the Solana community supporting liquidity, integration, and protocol development across Raydium and Jupiter.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FAQ -->
+<div id="faq" class="section">
+  <div class="section-label">FAQ</div>
+  <h2 class="section-title">Frequently asked questions.</h2>
+  <div class="faq-list">
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What is Zypher (ZPH)?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Zypher (ZPH) is a Solana-based cryptocurrency project building healthcare payments infrastructure. ZPH powers a system designed to solve the $80B+ uncompensated care crisis through decentralized payment rails connected to real federal data pipelines including NPPES, CMS, and HRSA.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Why is Zypher built on Solana?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Solana processes up to 65,000 transactions per second with sub-second finality and fees averaging less than $0.001 per transaction. For healthcare payment infrastructure that needs to operate at national scale, this throughput and cost profile is essential. Solana's composability also allows Zypher to integrate with existing DeFi liquidity and DEX infrastructure.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Is ZPH supply fixed? Can more tokens be minted?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">Yes — ZPH has a hard cap of 1,000,000,000 (1 billion) tokens. Both Mint Authority and Freeze Authority have been permanently revoked, meaning no additional ZPH can ever be created. This is cryptographically enforced and irreversible on-chain.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Where can I buy ZPH?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">ZPH is currently available on Jupiter and Raydium, two of Solana's leading DEX platforms. You can trade using the mint address: 8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t. Always verify the mint address before trading to ensure you are purchasing the correct token.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        What is zCARE and when is it launching?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">zCARE is Zypher's Phase 2 stable payment token designed specifically for healthcare transactions. Unlike generic stablecoins, zCARE will be built with HIPAA-compatible transaction structures and integration hooks for existing billing clearinghouses. It is collateralized through the ZPH infrastructure layer. Launch timeline will be announced as Phase 1 milestones are completed.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        Is ZPH a security or investment product?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">ZPH is a utility token designed for use within the Zypher ecosystem. It is not intended to constitute a security in any jurisdiction. Nothing on this website constitutes financial or investment advice. Always conduct your own due diligence before participating in any cryptocurrency project.</div>
+    </div>
+    <div class="faq-item">
+      <button class="faq-q" onclick="toggleFaq(this)">
+        How do I verify the mint address?
+        <span class="faq-icon">+</span>
+      </button>
+      <div class="faq-a">The official ZPH mint address is 8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t. You can verify this on-chain via Solana Explorer, or confirm it through our official Twitter (@zypherthecoin), this website, our GitHub repository, and our Jupiter and DexScreener listings. Never purchase a token without first confirming the mint address matches this exactly.</div>
+    </div>
+  </div>
+</div>
+
+<!-- HOW TO BUY -->
+<div id="howtobuy" class="section">
+  <div class="section-label">New to Crypto?</div>
+  <h2 class="section-title">How to buy ZPH —<br>step by step.</h2>
+  <p class="section-sub">Never bought crypto before? No problem. Here's everything you need to go from zero to holding ZPH in under 15 minutes.</p>
+
+  <div class="htb-steps">
+
+    <div class="htb-step">
+      <div class="htb-step-left">
+        <div class="htb-num">1</div>
+        <div class="htb-line"></div>
+      </div>
+      <div class="htb-step-right">
+        <div class="htb-step-title">Download a Solana wallet</div>
+        <div class="htb-step-desc">ZPH lives on the Solana blockchain, so you'll need a Solana-compatible wallet. <strong>Phantom</strong> is the most popular and beginner-friendly option — it works as a browser extension (Chrome, Firefox, Brave) and as a mobile app (iOS & Android).</div>
+        <div class="htb-callout">
+          <span class="htb-callout-icon">💡</span>
+          <span>Download Phantom at <strong>phantom.app</strong> — always verify you're on the official site before installing.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="htb-step">
+      <div class="htb-step-left">
+        <div class="htb-num">2</div>
+        <div class="htb-line"></div>
+      </div>
+      <div class="htb-step-right">
+        <div class="htb-step-title">Create your wallet & save your seed phrase</div>
+        <div class="htb-step-desc">When you set up Phantom, it will generate a <strong>seed phrase</strong> — 12 random words that are the master key to your wallet. Write these down on paper and store them somewhere safe offline. Never share your seed phrase with anyone, ever. Anyone who has it can access your funds.</div>
+        <div class="htb-callout htb-callout-warn">
+          <span class="htb-callout-icon">⚠️</span>
+          <span>Zypher will <strong>never</strong> ask for your seed phrase or private key. Any message asking for these is a scam.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="htb-step">
+      <div class="htb-step-left">
+        <div class="htb-num">3</div>
+        <div class="htb-line"></div>
+      </div>
+      <div class="htb-step-right">
+        <div class="htb-step-title">Fund your wallet with SOL</div>
+        <div class="htb-step-desc">To buy ZPH, you first need SOL — Solana's native currency — in your wallet. You can buy SOL from major exchanges like <strong>Coinbase</strong>, <strong>Kraken</strong>, or <strong>Binance</strong> using a bank transfer or debit card, then send it to your Phantom wallet address. You'll need a small amount of SOL (even $10–$20 worth) to get started, plus a tiny bit extra to cover transaction fees (usually less than $0.01).</div>
+        <div class="htb-callout">
+          <span class="htb-callout-icon">💡</span>
+          <span>Your Phantom wallet address starts with a string of letters and numbers. Copy it from the top of the Phantom app to receive SOL.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="htb-step">
+      <div class="htb-step-left">
+        <div class="htb-num">4</div>
+        <div class="htb-line"></div>
+      </div>
+      <div class="htb-step-right">
+        <div class="htb-step-title">Go to Jupiter and connect your wallet</div>
+        <div class="htb-step-desc">Jupiter (<strong>jup.ag</strong>) is Solana's leading token swap platform — it finds the best price across all DEXes automatically. Go to Jupiter, click <strong>Connect Wallet</strong> in the top right, and select Phantom. Approve the connection in the Phantom popup.</div>
+        <div class="htb-callout">
+          <span class="htb-callout-icon">💡</span>
+          <span>Connecting your wallet to Jupiter does not give it permission to spend your funds — you must manually approve each transaction.</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="htb-step">
+      <div class="htb-step-left">
+        <div class="htb-num">5</div>
+        <div class="htb-line"></div>
+      </div>
+      <div class="htb-step-right">
+        <div class="htb-step-title">Search for ZPH by mint address</div>
+        <div class="htb-step-desc">In Jupiter's swap interface, click the token selector and paste the official ZPH mint address to find the correct token. Always use the mint address — never search by name alone, as scam tokens can use the same ticker.</div>
+        <div class="htb-mint-box">
+          <div class="htb-mint-label">Official ZPH Mint Address</div>
+          <div class="htb-mint-addr" id="htb-mint">8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t</div>
+          <button class="htb-copy" onclick="copyHtbMint()">Copy</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="htb-step">
+      <div class="htb-step-left">
+        <div class="htb-num">6</div>
+      </div>
+      <div class="htb-step-right">
+        <div class="htb-step-title">Swap SOL for ZPH</div>
+        <div class="htb-step-desc">Enter the amount of SOL you want to swap for ZPH, review the estimated output and fees, then click <strong>Swap</strong>. Phantom will ask you to approve the transaction — review the details and confirm. Within seconds, ZPH will appear in your Phantom wallet. Welcome to the Zypher ecosystem.</div>
+        <div class="htb-actions">
+          <a href="https://jup.ag/tokens/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank" class="btn-primary" style="font-size:14px; padding: 11px 20px;">Buy ZPH on Jupiter ↗</a>
+          <a href="https://twitter.com/zypherthecoin" target="_blank" class="btn-secondary" style="font-size:14px; padding: 11px 20px;">Follow @zypherthecoin</a>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- LINKS -->
+<div id="links" class="section-full">
+  <div class="section-full-inner">
+    <div class="section-label">Official Links</div>
+    <h2 class="section-title">Trade, track, and follow ZPH.</h2>
+    <p class="section-sub">All official Zypher resources in one place. Always verify links before connecting your wallet.</p>
+    <div class="links-grid">
+      <a href="https://jup.ag/tokens/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank" class="link-card">
+        <div class="link-icon">🪐</div>
+        <div>
+          <div class="link-title">Jupiter</div>
+          <div class="link-desc">Trade ZPH on Jupiter DEX</div>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://raydium.io/liquidity/increase/?mode=add&pool_id=FKsYM7mBRR3oFPnJZYNYzSu9MjJLC4kYxatzYtPq8Aba" target="_blank" class="link-card">
+        <div class="link-icon">💧</div>
+        <div>
+          <div class="link-title">Raydium</div>
+          <div class="link-desc">Add liquidity to the ZPH pool</div>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://dexscreener.com/solana/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank" class="link-card">
+        <div class="link-icon">📊</div>
+        <div>
+          <div class="link-title">DexScreener</div>
+          <div class="link-desc">Live price & chart data</div>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://twitter.com/zypherthecoin" target="_blank" class="link-card">
+        <div class="link-icon">𝕏</div>
+        <div>
+          <div class="link-title">Twitter / X</div>
+          <div class="link-desc">@zypherthecoin — official updates</div>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://github.com/zypherthecoin/Zypher" target="_blank" class="link-card">
+        <div class="link-icon">🐙</div>
+        <div>
+          <div class="link-title">GitHub</div>
+          <div class="link-desc">Source code & whitepaper</div>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+      <a href="https://github.com/zypherthecoin/Zypher/blob/main/Zypher_Whitepaper.docx" target="_blank" class="link-card">
+        <div class="link-icon">📄</div>
+        <div>
+          <div class="link-title">Whitepaper</div>
+          <div class="link-desc">Full technical documentation</div>
+        </div>
+        <span class="link-arrow">↗</span>
+      </a>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div>
+        <div class="footer-brand-name">Zypher</div>
+        <div class="footer-brand-desc">Healthcare payments infrastructure built on Solana. Building the verified data layer that healthcare payments need.</div>
+      </div>
+      <div>
+        <div class="footer-col-title">Protocol</div>
+        <ul class="footer-links">
+          <li><a href="#about">About</a></li>
+          <li><a href="#tokenomics">Tokenomics</a></li>
+          <li><a href="#roadmap">Roadmap</a></li>
+          <li><a href="#zcare">zCARE</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Resources</div>
+        <ul class="footer-links">
+          <li><a href="https://github.com/zypherthecoin/Zypher/blob/main/Zypher_Whitepaper.docx" target="_blank">Whitepaper</a></li>
+          <li><a href="https://github.com/zypherthecoin/Zypher" target="_blank">GitHub</a></li>
+          <li><a href="#faq">FAQ</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-col-title">Trade</div>
+        <ul class="footer-links">
+          <li><a href="https://jup.ag/tokens/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank">Jupiter</a></li>
+          <li><a href="https://raydium.io/liquidity/increase/?mode=add&pool_id=FKsYM7mBRR3oFPnJZYNYzSu9MjJLC4kYxatzYtPq8Aba" target="_blank">Raydium</a></li>
+          <li><a href="https://dexscreener.com/solana/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank">DexScreener</a></li>
+          <li><a href="https://twitter.com/zypherthecoin" target="_blank">Twitter</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 Zypher Project</span>
+      <span>Mint: 8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t</span>
+    </div>
+    <div class="footer-disclaimer">
+      ZPH is a utility token and is not intended to constitute a security in any jurisdiction. Nothing on this website constitutes financial or investment advice. Cryptocurrency investments involve substantial risk including the possible loss of principal. Always conduct your own due diligence before participating in any cryptocurrency project.
+    </div>
+  </div>
+</footer>
+
+<script>
+function toggleFaq(btn) {
+  const item = btn.closest('.faq-item');
+  const isOpen = item.classList.contains('open');
+  document.querySelectorAll('.faq-item.open').forEach(el => el.classList.remove('open'));
+  if (!isOpen) item.classList.add('open');
+}
+
+function copyHtbMint() {
+  const addr = '8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t';
+  navigator.clipboard.writeText(addr).then(() => {
+    const btn = document.querySelector('.htb-copy');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy', 2000);
+  });
+}
+
+function copyMint() {
+  const addr = '8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t';
+  navigator.clipboard.writeText(addr).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => btn.textContent = 'Copy Address', 2000);
+  });
+}
+
+// Smooth scroll offset for fixed nav
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+    }
+  });
+});
+</script>
+</body>
+</html>
