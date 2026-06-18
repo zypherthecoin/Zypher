@@ -6,7 +6,7 @@
 <title>Zypher (ZPH) — Healthcare Payments Infrastructure on Solana</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,300&family=DM+Serif+Display:ital@0;1&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,300;1,9..40,400&family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
   :root {
     --teal: #0F6E56;
@@ -967,7 +967,7 @@
   }
 
   .htb-mint-addr {
-    font-family: monospace;
+    font-family: 'DM Mono', monospace;
     font-size: 12px;
     color: var(--teal-mid);
     flex: 1;
@@ -1122,6 +1122,16 @@
     .section-title { font-size: 30px; }
     .footer-top { grid-template-columns: 1fr; }
   }
+
+  /* Lucide icons — design-system standard (replaces emoji) */
+  .utility-icon svg { width: 18px; height: 18px; }
+  .link-icon { color: var(--teal); }
+  .link-icon svg { width: 22px; height: 22px; }
+  .wp-icon { color: var(--teal); }
+  .wp-icon svg { width: 24px; height: 24px; }
+  .team-avatar svg { width: 30px; height: 30px; }
+  .htb-callout-icon { display: inline-flex; }
+  .htb-callout-icon svg { width: 16px; height: 16px; }
 </style>
 </head>
 <body>
@@ -1306,28 +1316,28 @@
       <div class="token-utility">
         <h3>ZPH Utility</h3>
         <div class="utility-item">
-          <div class="utility-icon">🔍</div>
+          <div class="utility-icon"><i data-lucide="search"></i></div>
           <div>
             <div class="utility-title">Network Query Fees</div>
             <div class="utility-desc">Participants querying verified provider records pay fees denominated in ZPH, creating continuous demand as utilization scales.</div>
           </div>
         </div>
         <div class="utility-item">
-          <div class="utility-icon">⚙️</div>
+          <div class="utility-icon"><i data-lucide="settings"></i></div>
           <div>
             <div class="utility-title">Validator Incentives</div>
             <div class="utility-desc">Nodes that ingest, verify, and anchor federal data to the chain are compensated in ZPH.</div>
           </div>
         </div>
         <div class="utility-item">
-          <div class="utility-icon">🗳️</div>
+          <div class="utility-icon"><i data-lucide="vote"></i></div>
           <div>
             <div class="utility-title">Governance</div>
             <div class="utility-desc">ZPH holders participate in protocol governance — data source additions, fee parameters, and network upgrades.</div>
           </div>
         </div>
         <div class="utility-item">
-          <div class="utility-icon">🏦</div>
+          <div class="utility-icon"><i data-lucide="landmark"></i></div>
           <div>
             <div class="utility-title">zCARE Collateral</div>
             <div class="utility-desc">Phase 2 introduces ZPH as collateral backing the zCARE stable payment token, creating a direct demand sink.</div>
@@ -1469,7 +1479,7 @@
   <h2 class="section-title">Read the Whitepaper</h2>
   <p class="section-sub">The full Zypher whitepaper details our technical architecture, tokenomics, market analysis, and roadmap.</p>
   <a href="https://zypherthecoin.github.io/Zypher/Zypher_Whitepaper.pdf" target="_blank" class="whitepaper-cta">
-    <div class="wp-icon">📄</div>
+    <div class="wp-icon"><i data-lucide="file-text"></i></div>
     <div>
       <div class="wp-title">Zypher Whitepaper — Version 1.0</div>
       <div class="wp-sub">Full technical documentation · March 2026 · github.com/zypherthecoin/Zypher</div>
@@ -1492,13 +1502,13 @@
         <div class="team-bio">The core development team behind ZPH and the Zypher infrastructure protocol. Focused on building the data layer that healthcare payments need.</div>
       </div>
       <div class="team-card">
-        <div class="team-avatar">🏥</div>
+        <div class="team-avatar"><i data-lucide="stethoscope"></i></div>
         <div class="team-name">Healthcare Advisors</div>
         <div class="team-role">Industry & Regulatory Guidance</div>
         <div class="team-bio">Advisors with experience in healthcare billing, provider credentialing, and federal data systems including NPPES, CMS, and HRSA integrations.</div>
       </div>
       <div class="team-card">
-        <div class="team-avatar">⛓️</div>
+        <div class="team-avatar"><i data-lucide="link"></i></div>
         <div class="team-name">Blockchain Partners</div>
         <div class="team-role">Solana Ecosystem & DeFi</div>
         <div class="team-bio">Ecosystem partners within the Solana community supporting liquidity, integration, and protocol development across Raydium and Jupiter.</div>
@@ -1579,9 +1589,9 @@
       </div>
       <div class="htb-step-right">
         <div class="htb-step-title">Download a Solana wallet</div>
-        <div class="htb-step-desc">ZPH lives on the Solana blockchain, so you'll need a Solana-compatible wallet. <strong>Phantom</strong> is the most popular and beginner-friendly option — it works as a browser extension (Chrome, Firefox, Brave) and as a mobile app (iOS & Android).</div>
+        <div class="htb-step-desc">ZPH lives on the Solana blockchain, so you'll need a Solana-compatible wallet. <strong>Phantom</strong> is the most popular and beginner-friendly option — it works as a browser extension (Chrome, Firefox, Brave) and as a mobile app (iOS &amp; Android).</div>
         <div class="htb-callout">
-          <span class="htb-callout-icon">💡</span>
+          <span class="htb-callout-icon"><i data-lucide="lightbulb"></i></span>
           <span>Download Phantom at <strong>phantom.app</strong> — always verify you're on the official site before installing.</span>
         </div>
       </div>
@@ -1593,10 +1603,10 @@
         <div class="htb-line"></div>
       </div>
       <div class="htb-step-right">
-        <div class="htb-step-title">Create your wallet & save your seed phrase</div>
+        <div class="htb-step-title">Create your wallet &amp; save your seed phrase</div>
         <div class="htb-step-desc">When you set up Phantom, it will generate a <strong>seed phrase</strong> — 12 random words that are the master key to your wallet. Write these down on paper and store them somewhere safe offline. Never share your seed phrase with anyone, ever. Anyone who has it can access your funds.</div>
         <div class="htb-callout htb-callout-warn">
-          <span class="htb-callout-icon">⚠️</span>
+          <span class="htb-callout-icon"><i data-lucide="alert-triangle"></i></span>
           <span>Zypher will <strong>never</strong> ask for your seed phrase or private key. Any message asking for these is a scam.</span>
         </div>
       </div>
@@ -1611,7 +1621,7 @@
         <div class="htb-step-title">Fund your wallet with SOL</div>
         <div class="htb-step-desc">To buy ZPH, you first need SOL — Solana's native currency — in your wallet. You can buy SOL from major exchanges like <strong>Coinbase</strong>, <strong>Kraken</strong>, or <strong>Binance</strong> using a bank transfer or debit card, then send it to your Phantom wallet address. You'll need a small amount of SOL (even $10–$20 worth) to get started, plus a tiny bit extra to cover transaction fees (usually less than $0.01).</div>
         <div class="htb-callout">
-          <span class="htb-callout-icon">💡</span>
+          <span class="htb-callout-icon"><i data-lucide="lightbulb"></i></span>
           <span>Your Phantom wallet address starts with a string of letters and numbers. Copy it from the top of the Phantom app to receive SOL.</span>
         </div>
       </div>
@@ -1626,7 +1636,7 @@
         <div class="htb-step-title">Go to Jupiter and connect your wallet</div>
         <div class="htb-step-desc">Jupiter (<strong>jup.ag</strong>) is Solana's leading token swap platform — it finds the best price across all DEXes automatically. Go to Jupiter, click <strong>Connect Wallet</strong> in the top right, and select Phantom. Approve the connection in the Phantom popup.</div>
         <div class="htb-callout">
-          <span class="htb-callout-icon">💡</span>
+          <span class="htb-callout-icon"><i data-lucide="lightbulb"></i></span>
           <span>Connecting your wallet to Jupiter does not give it permission to spend your funds — you must manually approve each transaction.</span>
         </div>
       </div>
@@ -1673,7 +1683,7 @@
     <p class="section-sub">All official Zypher resources in one place. Always verify links before connecting your wallet.</p>
     <div class="links-grid">
       <a href="https://jup.ag/tokens/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank" class="link-card">
-        <div class="link-icon">🪐</div>
+        <div class="link-icon"><i data-lucide="arrow-left-right"></i></div>
         <div>
           <div class="link-title">Jupiter</div>
           <div class="link-desc">Trade ZPH on Jupiter DEX</div>
@@ -1681,7 +1691,7 @@
         <span class="link-arrow">↗</span>
       </a>
       <a href="https://raydium.io/liquidity/increase/?mode=add&pool_id=FKsYM7mBRR3oFPnJZYNYzSu9MjJLC4kYxatzYtPq8Aba" target="_blank" class="link-card">
-        <div class="link-icon">💧</div>
+        <div class="link-icon"><i data-lucide="droplet"></i></div>
         <div>
           <div class="link-title">Raydium</div>
           <div class="link-desc">Add liquidity to the ZPH pool</div>
@@ -1689,7 +1699,7 @@
         <span class="link-arrow">↗</span>
       </a>
       <a href="https://dexscreener.com/solana/8sG1MjujqWKNZKkkGQQdekuMTLJvFdP3hoohyEiUr82t" target="_blank" class="link-card">
-        <div class="link-icon">📊</div>
+        <div class="link-icon"><i data-lucide="line-chart"></i></div>
         <div>
           <div class="link-title">DexScreener</div>
           <div class="link-desc">Live price & chart data</div>
@@ -1697,7 +1707,7 @@
         <span class="link-arrow">↗</span>
       </a>
       <a href="https://twitter.com/zypherthecoin" target="_blank" class="link-card">
-        <div class="link-icon">𝕏</div>
+        <div class="link-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg></div>
         <div>
           <div class="link-title">Twitter / X</div>
           <div class="link-desc">@zypherthecoin — official updates</div>
@@ -1705,7 +1715,7 @@
         <span class="link-arrow">↗</span>
       </a>
       <a href="https://github.com/zypherthecoin/Zypher" target="_blank" class="link-card">
-        <div class="link-icon">🐙</div>
+        <div class="link-icon"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23A11.509 11.509 0 0 1 12 5.803c1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.91 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222 0 1.606-.014 2.898-.014 3.293 0 .322.216.694.825.576C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg></div>
         <div>
           <div class="link-title">GitHub</div>
           <div class="link-desc">Source code & whitepaper</div>
@@ -1713,7 +1723,7 @@
         <span class="link-arrow">↗</span>
       </a>
       <a href="https://zypherthecoin.github.io/Zypher/Zypher_Whitepaper.pdf" target="_blank" class="link-card">
-        <div class="link-icon">📄</div>
+        <div class="link-icon"><i data-lucide="file-text"></i></div>
         <div>
           <div class="link-title">Whitepaper</div>
           <div class="link-desc">Full technical documentation</div>
@@ -1769,6 +1779,7 @@
   </div>
 </footer>
 
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <script>
 function toggleFaq(btn) {
   const item = btn.closest('.faq-item');
@@ -1805,6 +1816,8 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     }
   });
 });
+
+if (window.lucide) { lucide.createIcons({ attrs: { 'stroke-width': 1.75 } }); }
 </script>
 </body>
 </html>
